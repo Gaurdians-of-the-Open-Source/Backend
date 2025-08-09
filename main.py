@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import report
+from routes import report, analyze
 
 app = FastAPI(
     title="LV.0 Main Backend",
@@ -7,8 +7,8 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# 라우터 등록
 app.include_router(report.router)
+app.include_router(analyze.router)
 
 @app.get("/")
 def read_root():
