@@ -1,0 +1,56 @@
+services:
+  gateway:
+    build: ./gateway
+    ports:
+      - "8000:8000"
+    volumes:
+      - workspace:/workspace
+    networks:
+      - lv0-net
+    env_file:
+      - .env
+    depends_on:
+      - flask-a
+      - flask-b
+    restart: unless-stopped
+
+  flask-a:
+    build: ./flask-a
+    ports:
+      - "5000:5000"
+    volumes:
+      - workspace:/workspace
+    networks:
+      - lv0-net
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  flask-b:
+    build: ./flask-b
+    ports:
+      - "5001:5001"
+    volumes:
+      - workspace:/workspace
+    networks:
+      - lv0-net
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    networks:
+      - lv0-net
+    depends_on:
+      - gateway
+    restart: unless-stopped
+
+volumes:
+  workspace:
+
+networks:
+  lv0-net:
+    driver: bridge
